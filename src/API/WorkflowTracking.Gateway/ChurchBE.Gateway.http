@@ -1,0 +1,6 @@
+@WorkflowTracking.Gateway_HostAddress = http://localhost:5014
+
+# GET {{WorkflowTracking.Gateway_HostAddress}}/weatherforecast/
+# Accept: application/json
+
+###

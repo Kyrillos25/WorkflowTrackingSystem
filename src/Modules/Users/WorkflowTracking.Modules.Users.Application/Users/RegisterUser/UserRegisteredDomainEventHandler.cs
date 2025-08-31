@@ -1,0 +1,39 @@
+﻿using WorkflowTracking.Common.Application.EventBus;
+using WorkflowTracking.Common.Application.Exceptions;
+using WorkflowTracking.Common.Application.Messaging;
+using WorkflowTracking.Common.Domain;
+using WorkflowTracking.Modules.Users.Application.Users.GetUser;
+using WorkflowTracking.Modules.Users.Domain.Users;
+using WorkflowTracking.Modules.Users.IntegrationEvents;
+using MediatR;
+
+namespace WorkflowTracking.Modules.Users.Application.Users.RegisterUser;
+internal sealed class UserRegisteredDomainEventHandler(ISender sender, IEventBus bus)
+    : DomainEventHandler<UserRegisteredDomainEvent>
+{
+    public override async Task Handle(
+        UserRegisteredDomainEvent domainEvent,
+        CancellationToken cancellationToken = default)
+    {
+        Result<UserResponse> result = await sender.Send(
+            new GetUserQuery(domainEvent.UserId),
+            cancellationToken);
+
+        if (result.IsFailure)
+        {
+            throw new WorkflowTrackingException(nameof(GetUserQuery), result.Error);
+        }
+
+        await bus.PublishAsync(
+            new UserRegisteredIntegrationEvent(
+                domainEvent.Id,
+                domainEvent.OccurredOnUtc,
+                result.Value.Id,
+                result.Value.Email,
+                result.Value.FirstName,
+                result.Value.LastName,
+                result.Value.Mobile),
+            cancellationToken);
+    }
+}
+
