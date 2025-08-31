@@ -1,4 +1,4 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -7,14 +7,14 @@ using WorkflowTracking.Common.Domain;
 using WorkflowTracking.Common.Presentation.Endpoints;
 using WorkflowTracking.Common.Presentation.Results;
 using WorkflowTracking.Modules.WFManagment.Application.Abstractions.Model.CreateWorkflow;
-using WorkflowTracking.Modules.WFManagment.Application.WFManagment.CreateWorkflow;
+using WorkflowTracking.Modules.WFManagment.Application.WFManagment.UpdateWorkflow;
 
 namespace WorkflowTracking.Modules.WFManagment.Presentation.WFManagement;
-internal sealed class CreateWorkflow : IEndpoint
+internal sealed class UpdateWorkflow : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("WFManagement/v1/Workflows", async (Request request, ISender sender) =>
+        app.MapPut("WFManagement/v1/Workflows", async (Request request, ISender sender) =>
         {
             List<WorkflowStepModel> steps = request.Steps?.Select(s => new Application.Abstractions.Model.CreateWorkflow.WorkflowStepModel(
                 s.StepName,
@@ -22,12 +22,13 @@ internal sealed class CreateWorkflow : IEndpoint
                 s.ActionType,
                 s.NextStep)).ToList() ?? new List<WorkflowStepModel>();
 
-            Result<Guid> result = await sender.Send(new CreateWorkflowCommand(
+            Result result = await sender.Send(new UpdateWorkflowCommand(
+                request.Id,
                 request.Name,
                 request.Description,
                 steps));
 
-            return result.Match(Results.Ok, ApiResults.Problem);
+            return result.Match(Results.NoContent, ApiResults.Problem);
         })
         .AllowAnonymous()
         .WithTags(Tags.WFManagements);
@@ -35,6 +36,8 @@ internal sealed class CreateWorkflow : IEndpoint
 
     internal sealed class Request
     {
+        [JsonPropertyName("id")]
+        public Guid Id { get; init; }
         [JsonPropertyName("name")]
         public string Name { get; init; }
 

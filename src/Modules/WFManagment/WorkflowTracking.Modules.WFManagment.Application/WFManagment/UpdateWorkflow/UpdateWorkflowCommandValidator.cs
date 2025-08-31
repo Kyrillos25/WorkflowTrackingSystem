@@ -1,11 +1,11 @@
-using FluentValidation;
-using WorkflowTracking.Modules.WFManagment.Application.Abstractions.Service;
+﻿using FluentValidation;
 
-namespace WorkflowTracking.Modules.WFManagment.Application.WFManagment;
-internal sealed class CreateWorkflowCommandValidator : AbstractValidator<CreateWorkflowCommand>
+namespace WorkflowTracking.Modules.WFManagment.Application.WFManagment.UpdateWorkflow;
+internal sealed class UpdateWorkflowCommandValidator : AbstractValidator<UpdateWorkflowCommand>
 {
-    public CreateWorkflowCommandValidator()
+    public UpdateWorkflowCommandValidator()
     {
+        RuleFor(c => c.Id).NotEmpty();
         RuleFor(c => c.Name).NotEmpty();
         RuleFor(c => c.Description).NotEmpty();
 

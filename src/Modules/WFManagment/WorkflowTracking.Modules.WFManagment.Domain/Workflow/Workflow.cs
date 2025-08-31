@@ -8,6 +8,12 @@ public sealed class Workflow : Entity
     private Workflow()
     {
     }
+    public Workflow(Guid id, string name, string description)
+    {
+        Id = id;
+        Name = name;
+        Description = description;
+    }
 
     public Guid Id { get; private set; }
     public string Name { get; set; }
@@ -24,6 +30,16 @@ public sealed class Workflow : Entity
         };
         return workflow;
     }
+    public void Update(string name, string description)
+    {
+        if (Name == name && Description == description)
+        {
+            return;
+        }
+
+        Name = name;
+        Description = description;
+    }
 
     public void AddStep(string stepName, string assignedTo, string actionType, string nextStep)
     {
@@ -31,5 +47,15 @@ public sealed class Workflow : Entity
         step.WorkflowId = Id;
         step.Workflow = this;
         _steps.Add(step);
+    }
+    public void AddSteps(List<WorkflowStep> steps)
+    {
+        foreach (WorkflowStep step in steps)
+        {
+            var createdStep = WorkflowStep.Create(step.StepName, step.AssignedTo, step.ActionType, step.NextStep);
+            createdStep.WorkflowId = Id;
+            createdStep.Workflow = this;
+            _steps.Add(createdStep);
+        }
     }
 }

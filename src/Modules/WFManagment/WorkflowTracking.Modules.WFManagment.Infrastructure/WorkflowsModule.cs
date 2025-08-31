@@ -43,6 +43,7 @@ public static class WorkflowsModule
                 .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IWorkflowRepository, WorkflowRepository>();
+        services.AddScoped<IWorkflowStepRepository, WorkflowStepRepository>();
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WorkflowsDbContext>());
 
