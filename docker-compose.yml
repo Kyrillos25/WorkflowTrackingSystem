@@ -3,7 +3,8 @@ services:
     image: ${DOCKER_REGISTRY-}workflowtracking
     container_name: WorkflowTracking.Gateway
     depends_on:
-      - workflowtracking.database
+      workflowtracking.database:
+        condition: service_healthy
     build:
       context: .
       dockerfile: src/API/WorkflowTracking.Gateway/Dockerfile
@@ -11,6 +12,9 @@ services:
   workflowtracking.users.api:
     image: ${DOCKER_REGISTRY-}workflowtrackingusersapi
     container_name: WorkflowTracking.Users.API
+    depends_on:
+      workflowtracking.database:
+        condition: service_healthy
     build:
       context: .
       dockerfile: src/API/WorkflowTracking.Users.API/Dockerfile
@@ -18,9 +22,12 @@ services:
   workflowtracking.wfmanagement.api:
     image: ${DOCKER_REGISTRY-}workflowtrackingwfmanagementsapi
     container_name: WorkflowTracking.WorkflowManagement.API
+    depends_on:
+      workflowtracking.database:
+        condition: service_healthy
     build:
       context: .
-      dockerfile: src/API/WorkflowTracking.Users.API/Dockerfile
+      dockerfile: src/API/WorkflowTracking.WorkflowManagement.API/Dockerfile
 
   workflowtracking.database:
     image: postgres:latest
@@ -30,16 +37,21 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     volumes:
-      #- ./.containers/db:/var/lib/postgresql/data
-      - ./postgres-data:/var/lib/postgresql/data
+      - pg-data:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
   
   workflowtracking.identity:
     image: quay.io/keycloak/keycloak:latest
     container_name: WorkflowTracking.Identity
     depends_on:
-      - workflowtracking.database
+      workflowtracking.database:
+        condition: service_healthy
     command: start-dev --import-realm
     environment:
       - KC_HEALTH_ENABLED=true
@@ -95,4 +107,5 @@ services:
 volumes:
   queue-data:
   queue-log:
+  pg-data:
 

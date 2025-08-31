@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+using FluentValidation;
+using WorkflowTracking.Modules.WFManagment.Application.Abstractions.Service;
 
 namespace WorkflowTracking.Modules.WFManagment.Application.WFManagment;
 internal sealed class CreateWorkflowCommandValidator : AbstractValidator<CreateWorkflowCommand>
@@ -7,5 +8,17 @@ internal sealed class CreateWorkflowCommandValidator : AbstractValidator<CreateW
     {
         RuleFor(c => c.Name).NotEmpty();
         RuleFor(c => c.Description).NotEmpty();
+
+        RuleFor(c => c.steps)
+            .NotNull()
+            .NotEmpty().WithMessage("Steps must not be empty.");
+
+        RuleForEach(c => c.steps).ChildRules(step =>
+        {
+            step.RuleFor(s => s.StepName).NotEmpty();
+            step.RuleFor(s => s.AssignedTo).NotEmpty();
+            step.RuleFor(s => s.ActionType).NotEmpty();
+            step.RuleFor(s => s.NextStep).NotEmpty();
+        });
     }
 }

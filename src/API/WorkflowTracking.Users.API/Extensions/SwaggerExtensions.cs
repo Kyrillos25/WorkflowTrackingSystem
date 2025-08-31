@@ -10,9 +10,9 @@ internal static class SwaggerExtensions
         {
             options.SwaggerDoc("v1", new OpenApiInfo
             {
-                Title = "Church Users API",
+                Title = "Workflow Users API",
                 Version = "v1",
-                Description = "Church Users API built using the modular monolith architecture."
+                Description = "Workflow Users API built using the modular monolith architecture."
             });
 
             options.CustomSchemaIds(t => t.FullName?.Replace("+", "."));

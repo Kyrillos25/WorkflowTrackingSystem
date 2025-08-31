@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options;
 using Quartz;
 
 namespace WorkflowTracking.Modules.WFManagment.Infrastructure.Inbox;
@@ -16,6 +16,7 @@ internal sealed class ConfigureProcessInboxJob(IOptions<InboxOptions> outboxOpti
             .AddTrigger(configure =>
                 configure
                     .ForJob(jobName)
+                    .StartAt(DateBuilder.FutureDate(10, IntervalUnit.Second))
                     .WithSimpleSchedule(schedule =>
                         schedule.WithIntervalInSeconds(_inboxOptions.IntervalInSeconds).RepeatForever()));
     }

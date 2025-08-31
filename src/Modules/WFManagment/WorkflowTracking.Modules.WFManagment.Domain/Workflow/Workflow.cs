@@ -1,4 +1,4 @@
-﻿using WorkflowTracking.Common.Domain;
+using WorkflowTracking.Common.Domain;
 
 namespace WorkflowTracking.Modules.WFManagment.Domain.Workflow;
 public sealed class Workflow : Entity
@@ -23,5 +23,13 @@ public sealed class Workflow : Entity
             Description = description
         };
         return workflow;
+    }
+
+    public void AddStep(string stepName, string assignedTo, string actionType, string nextStep)
+    {
+        var step = WorkflowStep.Create(stepName, assignedTo, actionType, nextStep);
+        step.WorkflowId = Id;
+        step.Workflow = this;
+        _steps.Add(step);
     }
 }
