@@ -1,5 +1,6 @@
-using System.Text.Json.Serialization;
-namespace WorkflowTracking.Modules.WFManagment.Application.Abstractions.Model.GetWorkflow;
+﻿using System.Text.Json.Serialization;
+
+namespace WorkflowTracking.Common.Application.Models.GetWorkflow;
 public sealed record GetWorkflowStepModel(
     [property: JsonPropertyName("id")] string Id,
     [property: JsonPropertyName("step_name")] string StepName,

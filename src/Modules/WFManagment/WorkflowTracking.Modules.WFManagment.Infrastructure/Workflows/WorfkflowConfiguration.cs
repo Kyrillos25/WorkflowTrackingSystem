@@ -16,6 +16,6 @@ internal sealed class WorfkflowConfiguration : IEntityTypeConfiguration<Workflow
         builder.HasMany(w => w.Steps)
                .WithOne(s => s.Workflow)
                .HasForeignKey(s => s.WorkflowId)
-               .OnDelete(DeleteBehavior.NoAction);
+               .OnDelete(DeleteBehavior.Cascade);
     }
 }

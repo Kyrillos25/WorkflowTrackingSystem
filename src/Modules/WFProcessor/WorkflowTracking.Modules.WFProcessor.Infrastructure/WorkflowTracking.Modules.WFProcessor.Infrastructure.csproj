@@ -1,0 +1,11 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Folder Include="Database\Migrations\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WorkflowTracking.Modules.WFProcessor.Application\WorkflowTracking.Modules.WFProcessor.Application.csproj" />
+    <ProjectReference Include="..\..\..\Common\WorkflowTracking.Common.Infrastructure\WorkflowTracking.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\WorkflowTracking.Modules.WFProcessor.Domain\WorkflowTracking.Modules.WFProcessor.Domain.csproj" />
+    <ProjectReference Include="..\WorkflowTracking.Modules.WFProcessor.Presentation\WorkflowTracking.Modules.WFProcessor.Presentation.csproj" />
+  </ItemGroup>
+</Project>

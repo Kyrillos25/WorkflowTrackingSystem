@@ -1,7 +1,7 @@
-using System.Linq;
+using WorkflowTracking.Common.Application.Commands.WFManagement;
 using WorkflowTracking.Common.Application.Messaging;
+using WorkflowTracking.Common.Application.Models.GetWorkflow;
 using WorkflowTracking.Common.Domain;
-using WorkflowTracking.Modules.WFManagment.Application.Abstractions.Model.GetWorkflow;
 using WorkflowTracking.Modules.WFManagment.Domain.Workflow;
 
 namespace WorkflowTracking.Modules.WFManagment.Application.WFManagment.GetWorkflowById;
@@ -14,9 +14,7 @@ internal sealed class GetWorkflowByIdCommandHandler(
         Workflow? workflow = await workflowRepository.GetByIdAsync(request.Id, cancellationToken);
         if (workflow is null)
         {
-            return Result.Failure<GetWorkflowModel>(Error.NotFound(
-                code: "Workflow.NotFound",
-                description: $"Workflow '{request.Id}' was not found."));
+            return Result.Failure<GetWorkflowModel>(WorkflowErrors.NotFound(request.Id));
         }
 
         var model = new GetWorkflowModel(

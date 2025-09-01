@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <UserSecretsId>12ba7f01-fbca-4c6a-9d93-24d2eaf93d49</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerfileContext>..\..\..</DockerfileContext>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+    <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
+    <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\WorkflowTracking.Common.Application\WorkflowTracking.Common.Application.csproj" />
+    <ProjectReference Include="..\..\Common\WorkflowTracking.Common.Infrastructure\WorkflowTracking.Common.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\Common\WorkflowTracking.Common.Presentation\WorkflowTracking.Common.Presentation.csproj" />
+    <ProjectReference Include="..\..\Modules\WFProcessor\WorkflowTracking.Modules.WFProcessor.Infrastructure\WorkflowTracking.Modules.WFProcessor.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

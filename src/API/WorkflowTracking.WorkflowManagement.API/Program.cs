@@ -1,17 +1,17 @@
+using System.Reflection;
+using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using RabbitMQ.Client;
-using System.Reflection;
+using Serilog;
 using WorkflowTracking.Common.Application;
+using WorkflowTracking.Common.Infrastructure;
 using WorkflowTracking.Common.Infrastructure.Configuration;
 using WorkflowTracking.Common.Infrastructure.EventBus;
-using WorkflowTracking.Common.Infrastructure;
+using WorkflowTracking.Common.Presentation.Endpoints;
+using WorkflowTracking.Modules.WFManagment.Infrastructure;
 using WorkflowTracking.WorkflowManagement.API.Extensions;
 using WorkflowTracking.WorkflowManagement.API.Middleware;
 using WorkflowTracking.WorkflowManagement.API.OpenTelemetry;
-using WorkflowTracking.Modules.WFManagment.Infrastructure;
-using Serilog;
-using WorkflowTracking.Common.Presentation.Endpoints;
-using HealthChecks.UI.Client;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 

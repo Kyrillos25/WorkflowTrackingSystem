@@ -47,11 +47,11 @@ public static class WorkflowsModule
 
         services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<WorkflowsDbContext>());
 
-        services.Configure<OutboxOptions>(configuration.GetSection("Users:Outbox"));
+        services.Configure<OutboxOptions>(configuration.GetSection("WorkflowManagement:Outbox"));
 
         services.ConfigureOptions<ConfigureProcessOutboxJob>();
 
-        services.Configure<InboxOptions>(configuration.GetSection("Users:Inbox"));
+        services.Configure<InboxOptions>(configuration.GetSection("WorkflowManagement:Inbox"));
 
         services.ConfigureOptions<ConfigureProcessInboxJob>();
     }

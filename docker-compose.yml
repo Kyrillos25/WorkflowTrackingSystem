@@ -20,7 +20,7 @@ services:
       dockerfile: src/API/WorkflowTracking.Users.API/Dockerfile
   
   workflowtracking.wfmanagement.api:
-    image: ${DOCKER_REGISTRY-}workflowtrackingwfmanagementsapi
+    image: ${DOCKER_REGISTRY-}workflowtrackingwfmanagementapi
     container_name: WorkflowTracking.WorkflowManagement.API
     depends_on:
       workflowtracking.database:
@@ -28,6 +28,16 @@ services:
     build:
       context: .
       dockerfile: src/API/WorkflowTracking.WorkflowManagement.API/Dockerfile
+  
+  workflowtracking.wfprocessor.api:
+    image: ${DOCKER_REGISTRY-}workflowtrackingwfproccessorapi
+    container_name: WorkflowTracking.WorkflowProcessor.API
+    depends_on:
+      workflowtracking.database:
+        condition: service_healthy
+    build:
+      context: .
+      dockerfile: src/API/WorkflowTracking.WorkflowProcessor.API/Dockerfile
 
   workflowtracking.database:
     image: postgres:latest
