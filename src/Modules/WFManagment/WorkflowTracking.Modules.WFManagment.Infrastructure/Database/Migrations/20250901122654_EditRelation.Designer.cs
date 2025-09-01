@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WorkflowTracking.Modules.WFManagment.Infrastructure.Database;
@@ -11,9 +12,11 @@ using WorkflowTracking.Modules.WFManagment.Infrastructure.Database;
 namespace WorkflowTracking.Modules.WFManagment.Infrastructure.Database.Migrations
 {
     [DbContext(typeof(WorkflowsDbContext))]
-    partial class WorkflowsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250901122654_EditRelation")]
+    partial class EditRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
