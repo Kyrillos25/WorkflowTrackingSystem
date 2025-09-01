@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
-using WorkflowTracking.Common.Application.Commands.WFManagement;
-using WorkflowTracking.Common.Application.Models.GetWorkflow;
 using WorkflowTracking.Common.Domain;
 using WorkflowTracking.Common.Presentation.Endpoints;
 using WorkflowTracking.Common.Presentation.Results;
@@ -18,22 +16,8 @@ internal sealed class GetProcess : IEndpoint
     {
         app.MapGet("WFProcessor/v1/processes", async ([AsParameters] GetProcessesQuery request, ISender sender) =>
         {
-            if (request.WorkflowId is not null)
-            {
-                Result<GetWorkflowModel> workflowResult = await sender.Send(new GetWorkflowByIdCommand(request.WorkflowId.Value));
-                if (workflowResult.Value is null)
-                {
-                    return workflowResult.Match(Results.NotFound, ApiResults.Problem);
-                }
-                Result<List<GetProcessQueryModel>> processQueryResult = await sender.Send(new GetProcessCommand(request.Status, request.AssignedTo, new List<GetWorkflowModel>() { workflowResult.Value }));
-                return processQueryResult.Match(Results.Ok, ApiResults.Problem);
-            }
-            else
-            {
-                Result<List<GetWorkflowModel>> workflowResults = await sender.Send(new GetWorkflowCommand());
-                Result<List<GetProcessQueryModel>> processQueryResult = await sender.Send(new GetProcessCommand(request.Status, request.AssignedTo, workflowResults.Value));
-                return processQueryResult.Match(Results.Ok, ApiResults.Problem);
-            }
+            Result<List<GetProcessQueryResponse>> processQueryResult = await sender.Send(new GetProcessCommand(request.WorkflowId, request.Status, request.AssignedTo));
+            return processQueryResult.Match(Results.Ok, ApiResults.Problem);
         })
         .AllowAnonymous()
         .WithTags(Tags.WFProcessors);

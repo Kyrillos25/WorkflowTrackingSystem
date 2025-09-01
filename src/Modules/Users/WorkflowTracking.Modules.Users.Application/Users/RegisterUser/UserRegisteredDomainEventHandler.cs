@@ -24,7 +24,7 @@ internal sealed class UserRegisteredDomainEventHandler(ISender sender, IEventBus
             throw new WorkflowTrackingException(nameof(GetUserQuery), result.Error);
         }
 
-        await bus.PublishAsync(
+        await bus.PublishAsync<UserRegisteredIntegrationEvent, Task>(
             new UserRegisteredIntegrationEvent(
                 domainEvent.Id,
                 domainEvent.OccurredOnUtc,

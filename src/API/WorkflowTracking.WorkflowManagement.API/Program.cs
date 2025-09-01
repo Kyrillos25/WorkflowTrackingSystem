@@ -34,7 +34,7 @@ var rabbitMqSettings = new RabbitMqSettings(builder.Configuration.GetConnectionS
 builder.Services.AddInfrastructure(
     DiagnosticsConfig.ServiceName,
     [
-        
+        WorkflowsModule.ConfigureConsumers
     ],
     rabbitMqSettings,
     databaseConnectionString,

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MassTransit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,7 @@ using WorkflowTracking.Modules.WFManagment.Infrastructure.Database;
 using WorkflowTracking.Modules.WFManagment.Infrastructure.Inbox;
 using WorkflowTracking.Modules.WFManagment.Infrastructure.Outbox;
 using WorkflowTracking.Modules.WFManagment.Infrastructure.Workflows;
+using WorkflowTracking.Modules.WFManagment.Presentation.Handlers;
 namespace WorkflowTracking.Modules.WFManagment.Infrastructure;
 public static class WorkflowsModule
 {
@@ -29,6 +31,13 @@ public static class WorkflowsModule
         services.AddEndpoints(Presentation.AssemblyReference.Assembly);
 
         return services;
+    }
+
+
+    public static void ConfigureConsumers(IRegistrationConfigurator registrationConfigurator, string instanceId)
+    {
+        registrationConfigurator.AddConsumer<GetWorkflowConsumer>().Endpoint(c => c.InstanceId = instanceId);
+        registrationConfigurator.AddConsumer<GetWorkflowByIdConsumer>().Endpoint(c => c.InstanceId = instanceId);
     }
 
     private static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)

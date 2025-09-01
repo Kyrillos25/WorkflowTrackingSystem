@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\WorkflowTracking.Common.Presentation\WorkflowTracking.Common.Presentation.csproj" />
+    <ProjectReference Include="..\..\WFProcessor\WorkflowTracking.Modules.WFProcessor.IntegrationEvents\WorkflowTracking.Modules.WFProcessor.IntegrationEvents.csproj" />
     <ProjectReference Include="..\WorkflowTracking.Modules.WFManagment.Application\WorkflowTracking.Modules.WFManagment.Application.csproj" />
   </ItemGroup>
 </Project>

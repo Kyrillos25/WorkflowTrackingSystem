@@ -11,7 +11,7 @@ internal sealed class UserProfileUpdatedDomainEventHandler(IEventBus eventBus)
         UserProfileUpdatedDomainEvent domainEvent,
         CancellationToken cancellationToken = default)
     {
-        await eventBus.PublishAsync(
+        await eventBus.PublishAsync<UserProfileUpdatedIntegrationEvent, Task>(
             new UserProfileUpdatedIntegrationEvent(
                 domainEvent.Id,
                 domainEvent.OccurredOnUtc,

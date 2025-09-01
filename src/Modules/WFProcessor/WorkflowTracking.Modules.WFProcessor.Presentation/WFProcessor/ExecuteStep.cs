@@ -3,8 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using WorkflowTracking.Common.Application.Commands.WFManagement;
-using WorkflowTracking.Common.Application.Models.GetWorkflow;
 using WorkflowTracking.Common.Domain;
 using WorkflowTracking.Common.Presentation.Endpoints;
 using WorkflowTracking.Common.Presentation.Results;
@@ -24,19 +22,13 @@ internal sealed class ExecuteStep : IEndpoint
             {
                 return processResult.Match(Results.NotFound, ApiResults.Problem);
             }
-            Result<GetWorkflowModel> workflowResult = await sender.Send(new GetWorkflowByIdCommand(new Guid(processResult.Value.WorkflowId)));
-            if (workflowResult.Value is null)
-            {
-                return workflowResult.Match(Results.NotFound, ApiResults.Problem);
-            }
 
             Result result = await sender.Send(new ExecuteProcessCommand(
                 request.ProcessId,
                 request.StepName,
                 request.PerformedBy,
                 request.Action,
-                processResult.Value,
-                workflowResult.Value));
+                processResult.Value));
 
             return result.Match(Results.NoContent, ApiResults.Problem);
         })

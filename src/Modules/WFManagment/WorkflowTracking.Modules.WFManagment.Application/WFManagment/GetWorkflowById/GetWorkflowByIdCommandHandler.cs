@@ -1,7 +1,6 @@
-using WorkflowTracking.Common.Application.Commands.WFManagement;
 using WorkflowTracking.Common.Application.Messaging;
-using WorkflowTracking.Common.Application.Models.GetWorkflow;
 using WorkflowTracking.Common.Domain;
+using WorkflowTracking.Modules.WFManagment.Application.Abstractions.Model.GetWorkflow;
 using WorkflowTracking.Modules.WFManagment.Domain.Workflow;
 
 namespace WorkflowTracking.Modules.WFManagment.Application.WFManagment.GetWorkflowById;

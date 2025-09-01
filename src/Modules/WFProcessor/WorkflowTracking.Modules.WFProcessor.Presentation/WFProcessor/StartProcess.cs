@@ -3,8 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
-using WorkflowTracking.Common.Application.Commands.WFManagement;
-using WorkflowTracking.Common.Application.Models.GetWorkflow;
 using WorkflowTracking.Common.Domain;
 using WorkflowTracking.Common.Presentation.Endpoints;
 using WorkflowTracking.Common.Presentation.Results;
@@ -17,11 +15,6 @@ internal sealed class StartProcess : IEndpoint
     {
         app.MapPost("WFProcessor/v1/processes/start", async (Request request, ISender sender) =>
         {
-            Result<GetWorkflowModel> workflowResult = await sender.Send(new GetWorkflowByIdCommand(request.WorkflowId));
-            if (workflowResult.Value is null)
-            {
-                return workflowResult.Match(Results.NotFound, ApiResults.Problem);
-            }
             Result<Guid> result = await sender.Send(new StartProcessCommand(
                 request.WorkflowId,
                 request.Initiator));

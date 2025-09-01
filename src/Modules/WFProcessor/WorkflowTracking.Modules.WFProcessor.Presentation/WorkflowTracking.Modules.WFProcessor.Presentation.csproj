@@ -2,5 +2,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Common\WorkflowTracking.Common.Presentation\WorkflowTracking.Common.Presentation.csproj" />
     <ProjectReference Include="..\WorkflowTracking.Modules.WFProcessor.Application\WorkflowTracking.Modules.WFProcessor.Application.csproj" />
+    <ProjectReference Include="..\WorkflowTracking.Modules.WFProcessor.IntegrationEvents\WorkflowTracking.Modules.WFProcessor.IntegrationEvents.csproj" />
   </ItemGroup>
 </Project>

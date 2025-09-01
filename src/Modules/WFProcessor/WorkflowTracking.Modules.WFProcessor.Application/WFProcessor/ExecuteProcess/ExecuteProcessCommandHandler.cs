@@ -1,20 +1,31 @@
-﻿using WorkflowTracking.Common.Application.Messaging;
-using WorkflowTracking.Common.Application.Models.GetWorkflow;
+﻿using WorkflowTracking.Common.Application.EventBus;
+using WorkflowTracking.Common.Application.Messaging;
 using WorkflowTracking.Common.Domain;
 using WorkflowTracking.Modules.WFProcessor.Application.Abstractions.Data;
 using WorkflowTracking.Modules.WFProcessor.Application.Abstractions.Model;
 using WorkflowTracking.Modules.WFProcessor.Domain.Processor;
+using WorkflowTracking.Modules.WFProcessor.IntegrationEvents;
 
 namespace WorkflowTracking.Modules.WFProcessor.Application.WFProcessor.ExecuteProcess;
-internal sealed class ExecuteProcessCommandHandler(
+internal sealed class ExecuteProcessCommandHandler(IEventBus bus,
+    IProcessRepository processRepository,
     IProcessStepExecutionRepository processStepExecutionRepository,
     IUnitOfWork unitOfWork)
     : ICommandHandler<ExecuteProcessCommand>
 {
     public async Task<Result> Handle(ExecuteProcessCommand request, CancellationToken cancellationToken)
     {
+        Process process = await processRepository.GetByIdAsync(request.ProcessId, cancellationToken);
+        if (process == null)
+        {
+            return Result.Failure<GetProcessModel>(ProcessErrors.NotFound(request.ProcessId));
+        }
+        WorkflowResponse workflowResponse = await bus.PublishAsync<GetWorkflowByIdIntegrationEvent, WorkflowResponse>(
+           new GetWorkflowByIdIntegrationEvent(Guid.NewGuid(), DateTime.Now, process.WorkflowId),
+           cancellationToken);
+
         List<ProcessStepExecution> processStepExecutions = await processStepExecutionRepository.GetCompletedSteps(request.ProcessId, cancellationToken);
-        Error validationError = ValidateCurrentStep(request.ProcessId, request.StepName, request.PerformedBy, request.workflow.Steps, processStepExecutions);
+        Error validationError = ValidateCurrentStep(request.ProcessId, request.StepName, request.PerformedBy, workflowResponse.results[0].Steps, processStepExecutions);
         var processStepExecution = ProcessStepExecution.Create(request.StepName, request.PerformedBy, request.Action);
         processStepExecution.ProcessId = request.ProcessId;
         if (validationError is not null)
@@ -64,5 +75,5 @@ internal sealed class ExecuteProcessCommandHandler(
         }
         return steps.Find(x => string.Equals(x.StepName.Replace(" ", ""), lastStep.NextStep.Replace(" ", ""),
                                                   StringComparison.OrdinalIgnoreCase));
-    } 
+    }
 }
