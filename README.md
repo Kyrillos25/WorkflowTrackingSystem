@@ -52,6 +52,7 @@ This will start all the required services:
 ### Access the Application
 
 Once all services are up and running, you can access:
+locate Gateway port and open browser
 - **Gateway API**: http://localhost:{portnumber}/WFManagement/swagger
 - **Gateway API**: http://localhost:{portnumber}/WFProcessor/swagger
 
